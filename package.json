@@ -20,6 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "spec": "ts-node ./spec/helpers/runner.ts ./spec/**/*spec.ts | tap-spec",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -39,5 +40,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/browserify": "^12.0.36",
+    "@types/tape": "^4.13.0",
+    "browserify": "^17.0.0",
+    "glob": "^7.1.6",
+    "puppeteer": "^8.0.0",
+    "tap-spec": "^5.0.0",
+    "tape": "^5.2.2",
+    "ts-node": "^9.1.1",
+    "tsify": "^5.0.2"
   }
 }
