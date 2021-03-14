@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
+    "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
@@ -12,6 +12,7 @@
     "@types/react-dom": "^17.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
@@ -20,7 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "spec": "ts-node ./spec/helpers/runner.ts ./spec/**/*spec.ts | tap-spec",
+    "spec": "node ./spec/helpers/runner.js ./spec/**/*spec.ts | tap-spec",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@types/browserify": "^12.0.36",
+    "@types/react-redux": "^7.1.16",
     "@types/tape": "^4.13.0",
     "browserify": "^17.0.0",
     "glob": "^7.1.6",

@@ -1,9 +1,9 @@
-import puppeteer from 'puppeteer'
-import glob from 'glob'
-import browserify from 'browserify'
-import tsify from 'tsify'
+const puppeteer = require('puppeteer')
+const glob = require('glob')
+const browserify = require('browserify')
+const tsify = require('tsify')
 
-const testGlob: string = process.argv[2]
+const testGlob = process.argv[2]
 
 const files = glob.sync(testGlob, {
   absolute: true
@@ -11,25 +11,24 @@ const files = glob.sync(testGlob, {
 
 const setupFile = "./spec/helpers/setup.ts"
 
-const b = browserify().add(setupFile)
-for (const file of files) {
-  b.add(file)
-}
+const b = browserify()
+  .add(setupFile)
+  .add(files)
+  .plugin(tsify);
 
 (async () => {
 
-  const testBundle: string = await new Promise(resolve => {
+  const testBundle = await new Promise(resolve => {
     let text = ""
-    b.plugin(tsify)
-      .bundle()
+    b.bundle()
       .on('data', function (data) {
         text += data.toString()
       })
       .on('end', function () {
         resolve(text)
       })
-    })
-  
+  })
+
 
   const browser = await puppeteer.launch()
   const page = await browser.newPage()

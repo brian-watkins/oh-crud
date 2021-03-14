@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { configureDisplay } from './display/factory';
 import reportWebVitals from './reportWebVitals';
+import { CatalogReader } from './CatalogReader';
+
+const catalogReader: CatalogReader = {
+  fetchProducts: () => []
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    { configureDisplay(catalogReader) }
   </React.StrictMode>,
   document.getElementById('root')
 );
