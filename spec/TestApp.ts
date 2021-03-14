@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import { Test } from "tape"
 import { Product } from "../src/Product"
 import { configureDisplay } from "../src/display/factory"
@@ -22,6 +22,8 @@ export class TestApp {
   }
 
   async expectProductsToBeShown(t: Test, products: Array<Product>): Promise<void> {
+    await waitFor(() => this.testCatalogReader.productsFetched > 0)
+
     for (const product of products) {
       t.true(this.showsText(product.name), `Product name '${product.name}' is displayed`)
       t.true(this.showsText(product.price), `Product price '${product.price}' is displayed`)
@@ -29,10 +31,16 @@ export class TestApp {
   }
 }
 
+
 class TestCatalogReader implements CatalogReader {
+  productsFetched = 0
+
   constructor(private products: Array<Product>) {}
 
-  fetchProducts(): Product[] {
-    return this.products
+  fetchProducts(): Promise<Product[]> {
+    return new Promise(resolve => {
+      this.productsFetched++
+      resolve(this.products)
+    })
   }
 }

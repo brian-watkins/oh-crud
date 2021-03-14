@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { CatalogReader } from './CatalogReader';
 
 const catalogReader: CatalogReader = {
-  fetchProducts: () => []
+  fetchProducts: () => Promise.resolve([])
 }
 
 ReactDOM.render(

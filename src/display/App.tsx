@@ -1,14 +1,29 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux'
+import { CatalogReader } from '../CatalogReader';
 import ProductList from './ProductList';
-// import logo from './logo.svg';
-// import './App.css';
+import { AppAction } from './store';
 
-function App() {
+export interface AppProps {
+  catalogReader: CatalogReader
+}
+
+function App(props: AppProps) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(async (send: Dispatch<AppAction>) => {
+      const products = await props.catalogReader.fetchProducts()
+      send({ type: "gotProducts", products })
+    })
+  })
+
   return (
     <main>
       <div className="App">
         Welcome to the store!
-      </div>
+        </div>
       <ProductList />
     </main>
   );

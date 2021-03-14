@@ -1,13 +1,14 @@
-import { createStore, Reducer } from "redux";
-import { CatalogReader } from "../CatalogReader";
+import { Reducer, createStore, applyMiddleware } from "redux";
 import { Product } from "../Product";
+import thunk from 'redux-thunk'
 
 export interface AppState {
   products: Array<Product>
 }
 
-type FetchProducts = {
-  type: "fetchProducts"
+interface GotProducts {
+  type: "gotProducts",
+  products: Array<Product>
 }
 
 const InitialAppState: AppState = {
@@ -16,19 +17,20 @@ const InitialAppState: AppState = {
   ]
 }
 
-type AppAction
-  = FetchProducts
+export type AppAction
+  = GotProducts
 
-function reducerFactory(catalogReader: CatalogReader): Reducer<AppState, AppAction> {
+function reducerFactory(): Reducer<AppState, AppAction> {
   return (state, action) => {
-    return {
-      products: catalogReader.fetchProducts()
+    switch (action.type) {
+      case "gotProducts":
+        return Object.assign(state, { products: action.products })
+      default:
+        return InitialAppState
     }
   }
 }
 
-export function configureStore(catalogReader: CatalogReader) {
-  return createStore(reducerFactory(catalogReader))
+export function appStore() {
+  return createStore(reducerFactory(), applyMiddleware(thunk))
 }
-
-// export default createStore(reducer)

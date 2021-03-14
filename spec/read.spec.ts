@@ -3,7 +3,7 @@ import { TestApp } from './TestApp'
 import { products } from './TestProduct'
 import { listOf } from './TestHelpers'
 
-test("Read Products Capability", async function(suite) {
+test("Read Products Capability", function (suite) {
 
   suite.test('when the app first loads', async function(t) {
     const testApp = new TestApp()
