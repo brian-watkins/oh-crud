@@ -1,17 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import { configureDisplay } from './display/factory';
 import reportWebVitals from './reportWebVitals';
-import { CatalogReader } from './CatalogReader';
+import { configureApp } from './display/appFactory';
 
-const catalogReader: CatalogReader = {
-  fetchProducts: () => Promise.resolve([])
+
+const appConfig = {
+  catalogHost: "http://replace.me"
 }
 
 ReactDOM.render(
   <React.StrictMode>
-    { configureDisplay(catalogReader) }
+  { configureApp(appConfig) }
   </React.StrictMode>,
   document.getElementById('root')
 );

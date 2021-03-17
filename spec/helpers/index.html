@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body></body>
+  <script>
+    // Weird stuff to disable console message for react dev tools
+    __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      supportsFiber: true,
+      inject: function () { },
+      onCommitFiberRoot: function () { },
+      onCommitFiberUnmount: function () { },
+    };
+  </script>
+  <script src="./testBundle.ts"></script>
+</html>

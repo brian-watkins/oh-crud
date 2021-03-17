@@ -18,8 +18,7 @@ function ProductList() {
 function productView(product: Product) {
   return (
     <li key={product.productId}>
-      <span>{product.name}</span>
-      <span>{product.price}</span>
+      {product.name} costs ${product.price}
     </li>
   )
 }

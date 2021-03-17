@@ -6,12 +6,11 @@ import { listOf } from './TestHelpers'
 test("Read Products Capability", function (suite) {
 
   suite.test('when the app first loads', async function(t) {
-    const testApp = new TestApp()
+    const testApp = await new TestApp(t)
       .withProducts(listOf(3, products))
       .build()
 
-    await testApp.expectProductsToBeShown(t, listOf(3, products))
+    await testApp.expectProductsToBeDisplayed(listOf(3, products))
   })
 
 })
-

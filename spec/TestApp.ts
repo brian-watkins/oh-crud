@@ -1,46 +1,55 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { Test } from "tape"
 import { Product } from "../src/Product"
-import { configureDisplay } from "../src/display/factory"
-import { CatalogReader } from "../src/CatalogReader"
+import { configureApp } from "../src/display/appFactory"
+import { setupWorker, rest, SetupWorkerApi } from 'msw'
 
 export class TestApp {
-  private testCatalogReader: TestCatalogReader = new TestCatalogReader([])
+  private worker?: SetupWorkerApi
+  private testCatalogData: Product[] = []
+
+  constructor(private test: Test) {}
 
   withProducts (products: Array<Product>): TestApp {
-    this.testCatalogReader = new TestCatalogReader(products)
+    this.testCatalogData = products
     return this
   }
 
-  build(): TestApp {
-    render(configureDisplay(this.testCatalogReader))
+  async build(): Promise<TestApp> {
+    await navigator.serviceWorker.register("./helpers/mockServiceWorker.js", { scope: "/" })
+
+    const handlers = [
+      rest.get('http://someplace.com/products', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(this.testCatalogData))
+      })
+    ]
+
+    this.worker = setupWorker(...handlers)
+    await this.worker.start({
+      quiet: true
+    })
+
+    await wait(50)
+
+    render(configureApp({ catalogHost: "http://someplace.com" }))
+
     return this
   }
 
-  showsText(text: string): boolean {
-    return screen.queryByText(text) !== null
+  showsText(text: string, name?: string) {
+    this.test.true(screen.queryByText(text, { exact: false }) !== null, `${name || text} is displayed`)
   }
 
-  async expectProductsToBeShown(t: Test, products: Array<Product>): Promise<void> {
-    await waitFor(() => this.testCatalogReader.productsFetched > 0)
+  async expectProductsToBeDisplayed(products: Array<Product>): Promise<void> {
+    await wait(100)
 
     for (const product of products) {
-      t.true(this.showsText(product.name), `Product name '${product.name}' is displayed`)
-      t.true(this.showsText(product.price), `Product price '${product.price}' is displayed`)
+      this.showsText(product.name, `Product name '${product.name}'`)
+      this.showsText(product.price, `Product price '$${product.price}'`)
     }
   }
 }
 
-
-class TestCatalogReader implements CatalogReader {
-  productsFetched = 0
-
-  constructor(private products: Array<Product>) {}
-
-  fetchProducts(): Promise<Product[]> {
-    return new Promise(resolve => {
-      this.productsFetched++
-      resolve(this.products)
-    })
-  }
+const wait = (timeout: number = 0): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, timeout))
 }
