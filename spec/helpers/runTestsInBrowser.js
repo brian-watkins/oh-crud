@@ -8,13 +8,11 @@ const testBundleURL = process.argv[2];
 
   await new Promise(resolve => {
     page.on('console', async msg => {
-      for (let i = 0; i < msg.args().length; ++i) {
-        const message = msg.text()
-        if (message === "TAPE_FINISHED!") {
-          resolve(null)
-        } else {
-          console.log(msg.text());
-        }
+      const message = msg.text()
+      if (message === "TAPE_FINISHED!") {
+        resolve(null)
+      } else {
+        console.log(msg.text());
       }
     })
 
@@ -23,6 +21,6 @@ const testBundleURL = process.argv[2];
 
   if (process.env.WATCH === "false") {
     await page.close()
-    await browser.close()  
+    await browser.close()
   }
 })();
