@@ -17,7 +17,7 @@ function App(props: AppProps) {
       const products = await props.catalogReader.fetchProducts()
       send({ type: "gotProducts", products })
     })
-  })
+  }, [])
 
   return (
     <main>

@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fun Api",
+    "version": "1.0",
+    "description": "An api for doing fun things!",
+    "contact": {
+      "name": "Brian Watkins",
+      "email": "brian.watkins@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "",
+        "operationId": "get-products",
+        "description": "Get all products from the catalog",
+        "tags": [
+          "catalog"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "title": "Product",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "price"
+        ]
+      }
+    },
+    "responses": {}
+  },
+  "tags": [
+    {
+      "name": "catalog"
+    }
+  ]
+}

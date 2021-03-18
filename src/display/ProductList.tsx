@@ -17,7 +17,7 @@ function ProductList() {
 
 function productView(product: Product) {
   return (
-    <li key={product.productId}>
+    <li key={product.id}>
       {product.name} costs ${product.price}
     </li>
   )

@@ -13,7 +13,7 @@ interface GotProducts {
 
 const InitialAppState: AppState = {
   products: [
-    { productId: "0", name: "Super Product 0", price: "9.99" }
+    { id: "0", name: "Super Product 0", price: "9.99" }
   ]
 }
 

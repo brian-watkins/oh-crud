@@ -2876,7 +2876,7 @@ ajv-keywords@^3.1.0, ajv-keywords@^3.4.1, ajv-keywords@^3.5.2:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
   integrity sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==
 
-ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.5:
+ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.5, ajv@^6.5.4:
   version "6.12.6"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
   integrity sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==
@@ -9380,6 +9380,19 @@ open@^7.0.2:
   dependencies:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
+
+openapi-response-validator@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/openapi-response-validator/-/openapi-response-validator-7.4.0.tgz#4de7dab639fb78dc4ef3ca8e60f7c7e1d42ceb8f"
+  integrity sha512-Su8jA45PhegUgJnEAT15DYt2spPJgvjyTtXqg+Lw5AtGePfcQskV6ACEzsL0XPoAXIFf09Vx6sBor9pek+tl+Q==
+  dependencies:
+    ajv "^6.5.4"
+    openapi-types "^7.2.3"
+
+openapi-types@^7.2.3:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-7.2.3.tgz#83829911a3410a022f0e0cf2b0b2e67232ccf96e"
+  integrity sha512-olbaNxz12R27+mTyJ/ZAFEfUruauHH27AkeQHDHRq5AF0LdNkK1SSV7EourXQDK+4aX7dv2HtyirAGK06WMAsA==
 
 opn@^5.1.0, opn@^5.5.0:
   version "5.5.0"
