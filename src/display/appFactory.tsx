@@ -8,12 +8,12 @@ export interface AppConfiguration {
 }
 
 export function configureApp(config: AppConfiguration) {
-  const store = appStore()
   const catalogReader = new HttpCatalogReader(config.catalogHost)
+  const store = appStore(catalogReader)
 
   return (
     <Provider store={store}>
-      <App catalogReader={catalogReader} />
+      <App />
     </Provider>
   )
 }

@@ -1,6 +1,8 @@
 import { Reducer, createStore, applyMiddleware } from "redux";
 import { Product } from "../Product";
-import thunk from 'redux-thunk'
+import createSagaMiddleware from 'redux-saga'
+import { CatalogReader } from "../CatalogReader";
+import { getProductsSaga } from "./getProductsSaga";
 
 export interface AppState {
   products: Array<Product>
@@ -12,9 +14,7 @@ interface GotProducts {
 }
 
 const InitialAppState: AppState = {
-  products: [
-    { id: "0", name: "Super Product 0", price: "9.99" }
-  ]
+  products: []
 }
 
 export type AppAction
@@ -31,6 +31,12 @@ function reducerFactory(): Reducer<AppState, AppAction> {
   }
 }
 
-export function appStore() {
-  return createStore(reducerFactory(), applyMiddleware(thunk))
+export function appStore(catalogReader: CatalogReader) {
+  const sagaMiddleware = createSagaMiddleware()
+  
+  const store = createStore(reducerFactory(), applyMiddleware(sagaMiddleware))
+
+  sagaMiddleware.run(getProductsSaga(catalogReader))
+
+  return store
 }
