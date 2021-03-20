@@ -6,9 +6,15 @@ import { setupWorker, rest, SetupWorkerApi } from 'msw'
 import OpenApiResponseValidator from 'openapi-response-validator'
 import catalogApiDoc from '../apiContracts/Catalog-Api.v1.json'
 
+interface RequestData {
+  path: string,
+  method: string
+}
+
 export class TestApp {
   private worker?: SetupWorkerApi
   private testCatalogData: Product[] = []
+  private requests: Map<string,RequestData> = new Map()
 
   constructor(private test: Test) {}
 
@@ -17,35 +23,41 @@ export class TestApp {
     return this
   }
 
-  async build(): Promise<TestApp> {
-    await navigator.serviceWorker.register("./helpers/mockServiceWorker.js", { scope: "/" })
-
+  async start(): Promise<TestApp> {
     const handlers = [
       rest.get('http://someplace.com/products', (req, res, ctx) => {
+        this.requests.set(req.id, { path: req.url.pathname, method: req.method })
         return res(ctx.status(200), ctx.json(this.testCatalogData))
       })
     ]
 
-    this.worker = setupWorker(...handlers)
-
-    this.worker.on("response:mocked", async (res, reqId) => {
-      const body = await res.json()
-      const result = this.getProductsResponseValidator().validateResponse(res.status, body)
-      this.test.false(result, 'the getProducts response is valid')
-    })
-
-    await this.worker.start({
-      quiet: true
-    })
+    await this.startHttpServer(handlers)
 
     render(configureApp({ catalogHost: "http://someplace.com" }))
 
     return this
   }
 
-  private getProductsResponseValidator() {
+  private async startHttpServer(handlers) {
+    await navigator.serviceWorker.register("./helpers/mockServiceWorker.js", { scope: "/" })
+
+    this.worker = setupWorker(...handlers)
+
+    this.worker.on("response:mocked", async (res, reqId) => {
+      const body = await res.json()
+      const result = this.getResponseValidator(reqId).validateResponse(res.status, body)
+      this.test.false(result, 'the getProducts response is valid')
+    })
+
+    await this.worker.start({
+      quiet: true
+    })
+  }
+
+  private getResponseValidator(requestId: string) {
+    const requestData = this.requests.get(requestId)
     return new OpenApiResponseValidator({
-      responses: catalogApiDoc.paths["/products"].get.responses as any,
+      responses: catalogApiDoc.paths[requestData.path][requestData.method.toLowerCase()].responses as any,
       components: catalogApiDoc.components as any,
     })
   }

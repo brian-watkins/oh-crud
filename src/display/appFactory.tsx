@@ -1,6 +1,6 @@
-import { Provider } from "react-redux";
-import { HttpCatalogReader } from "../HttpCatalogReader";
-import App from "./App";
+import { Provider } from "react-redux"
+import { HttpCatalogReader } from "../catalogReader/HttpCatalogReader"
+import App from "./App"
 import { appStore } from './store'
 
 export interface AppConfiguration {

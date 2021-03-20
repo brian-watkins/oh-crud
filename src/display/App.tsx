@@ -14,7 +14,7 @@ function App(props: AppProps) {
 
   useEffect(() => {
     dispatch(async (send: Dispatch<AppAction>) => {
-      const products = await props.catalogReader.fetchProducts()
+      const products = await props.catalogReader.getProducts()
       send({ type: "gotProducts", products })
     })
   }, [])

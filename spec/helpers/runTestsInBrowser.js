@@ -7,13 +7,16 @@ const testBundleURL = process.argv[2];
   const page = await browser.newPage()
 
   await new Promise(resolve => {
-    page.on('console', async msg => {
+    page.on('console', msg => {
       const message = msg.text()
       if (message === "TAPE_FINISHED!") {
         resolve(null)
       } else {
         console.log(msg.text());
       }
+    })
+    page.on("pageerror", msg => {
+      console.log(msg)
     })
 
     page.goto(testBundleURL)
