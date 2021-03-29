@@ -1,4 +1,4 @@
-import { Product } from '../src/Product'
+import { Product } from '../../src/Product'
 
 export function products(id: number): Product {
   return {

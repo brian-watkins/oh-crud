@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react"
-import { Test } from "tape"
+import { Assert } from "zora"
 import { Product } from "../src/Product"
 import { configureApp } from "../src/display/appFactory"
-import { setupWorker, rest, SetupWorkerApi } from 'msw'
+import { setupWorker, rest, SetupWorkerApi, DefaultRequestBody, MockedRequest, RestHandler } from 'msw'
 import OpenApiResponseValidator from 'openapi-response-validator'
 import catalogApiDoc from '../apiContracts/Catalog-Api.v1.json'
 
@@ -16,7 +16,7 @@ export class TestApp {
   private testCatalogData: Product[] = []
   private requests: Map<string,RequestData> = new Map()
 
-  constructor(private test: Test) {}
+  constructor(private test: Assert) {}
 
   withProducts (products: Array<Product>): TestApp {
     this.testCatalogData = products
@@ -38,20 +38,20 @@ export class TestApp {
     return this
   }
 
-  private async startHttpServer(handlers) {
-    await navigator.serviceWorker.register("./helpers/mockServiceWorker.js", { scope: "/" })
-
+  private async startHttpServer(handlers: RestHandler<MockedRequest<DefaultRequestBody>>[]) {
     this.worker = setupWorker(...handlers)
 
     this.worker.on("response:mocked", async (res, reqId) => {
       const body = await res.json()
       const result = this.getResponseValidator(reqId).validateResponse(res.status, body)
-      this.test.false(result, 'the getProducts response is valid')
+      this.test.falsy(result, 'the getProducts response is valid')
     })
 
     await this.worker.start({
-      quiet: true
+      quiet: true,
     })
+
+    await wait(300)
   }
 
   private getResponseValidator(requestId: string) {
@@ -63,7 +63,7 @@ export class TestApp {
   }
 
   showsText(text: string, name?: string) {
-    this.test.true(screen.queryByText(text, { exact: false }) !== null, `${name || text} is displayed`)
+    this.test.truthy(screen.queryByText(text, { exact: false }) !== null, `${name || text} is displayed`)
   }
 
   async expectProductsToBeDisplayed(products: Array<Product>): Promise<void> {

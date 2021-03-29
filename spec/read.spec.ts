@@ -1,7 +1,7 @@
-import test from 'tape'
+import { test } from 'zora'
 import { TestApp } from './TestApp'
-import { products } from './TestProduct'
-import { listOf } from './TestHelpers'
+import { products } from './helpers/TestProduct'
+import { listOf } from './helpers/TestHelpers'
 
 test("Read Products Capability", function (suite) {
 
@@ -11,8 +11,6 @@ test("Read Products Capability", function (suite) {
       .start()
 
     await testApp.expectProductsToBeDisplayed(listOf(3, products))
-
-    t.end()
   })
 
 })

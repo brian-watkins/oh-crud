@@ -23,10 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "spec:serve": "node ./spec/helpers/serveTests.js ./spec/**/*.spec.ts",
-    "spec:run": "node ./spec/helpers/runTestsInBrowser.js http://localhost:2222/index.html | tap-spec",
-    "spec:watch": "start-server-and-test 'yarn spec:serve' 2222 'yarn spec:run'",
-    "spec": "WATCH=false yarn spec:watch"
+    "spec": "playwright-test --runner zora './spec/**/*.spec.ts' --assets './spec/helpers/assets' | tap-difflet",
+    "spec:watch": "playwright-test --runner zora './spec/**/*.spec.ts' --watch --assets './spec/helpers/assets' | tap-difflet"
   },
   "eslintConfig": {
     "extends": [
@@ -47,22 +45,16 @@
     ]
   },
   "devDependencies": {
-    "@types/browserify": "^12.0.36",
     "@types/react-redux": "^7.1.16",
-    "@types/tape": "^4.13.0",
-    "browserify": "^17.0.0",
-    "glob": "^7.1.6",
     "msw": "^0.27.1",
     "openapi-response-validator": "^7.4.0",
-    "parcel-bundler": "1.12.3",
-    "playwright-chromium": "^1.9.2",
-    "start-server-and-test": "^1.12.0",
+    "playwright-test": "^2.1.0",
+    "tap-difflet": "^0.7.2",
     "tap-spec": "^5.0.0",
-    "tape": "^5.2.2",
     "ts-node": "^9.1.1",
-    "tsify": "^5.0.2"
+    "zora": "^4.0.2"
   },
   "msw": {
-    "workerDirectory": "spec/helpers"
+    "workerDirectory": "spec/helpers/assets"
   }
 }
