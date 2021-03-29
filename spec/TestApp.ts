@@ -48,10 +48,17 @@ export class TestApp {
     })
 
     await this.worker.start({
-      quiet: true,
+      quiet: true
     })
 
-    await wait(300)
+    const registration = await navigator.serviceWorker.ready
+    await new Promise<void>(resolve => {
+      registration.active.addEventListener("statechange", (event: any) => {
+        if (event.target.state === "activated") {
+          resolve()
+        }
+      })
+    })
   }
 
   private getResponseValidator(requestId: string) {
