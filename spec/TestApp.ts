@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { cleanup, render, screen } from "@testing-library/react"
 import { Assert } from "zora"
 import { Product } from "../src/Product"
 import { configureApp } from "../src/display/appFactory"
@@ -38,6 +38,10 @@ export class TestApp {
     return this
   }
 
+  stop() {
+    cleanup()
+  }
+
   private async startHttpServer(handlers: RestHandler<MockedRequest<DefaultRequestBody>>[]) {
     this.worker = setupWorker(...handlers)
 
@@ -52,13 +56,16 @@ export class TestApp {
     })
 
     const registration = await navigator.serviceWorker.ready
-    await new Promise<void>(resolve => {
-      registration.active.addEventListener("statechange", (event: any) => {
-        if (event.target.state === "activated") {
-          resolve()
-        }
-      })
-    })
+
+    if (registration.active.state !== "activated") {
+      await new Promise<void>(resolve => {
+        registration.active.addEventListener("statechange", (event: any) => {
+          if (event.target.state === "activated") {
+            resolve()
+          }
+        })
+      })  
+    }
   }
 
   private getResponseValidator(requestId: string) {

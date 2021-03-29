@@ -24,6 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "spec": "playwright-test --runner zora './spec/**/*.spec.ts' --assets './spec/helpers/assets' | tap-difflet",
+    "spec:debug": "playwright-test --runner zora './spec/**/*.spec.ts' --assets './spec/helpers/assets' -d | tap-difflet",
     "spec:watch": "playwright-test --runner zora './spec/**/*.spec.ts' --watch --assets './spec/helpers/assets' | tap-difflet"
   },
   "eslintConfig": {
